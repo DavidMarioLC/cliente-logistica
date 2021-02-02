@@ -92,7 +92,7 @@ const ContainerAlmacen = () => {
             <Tabs type="card" >
                 <TabPane tab="Ingresos" key="1">
                     {/* <IngresoAlmacen listaKardex={ListarKardex} ListarMovimientos={ListarMovimientos} /> */}
-                    <IngresoDeAlmacen listarKardex={ListarKardex} />
+                    <IngresoDeAlmacen listarKardex={ListarKardex} ListarMovimientos={ListarMovimientos} />
                 </TabPane>
                 <TabPane tab="Salidas" key="2">
                     <SalidaDeAlmacen listarKardex={ListarKardex} ListarMovimientos={ListarMovimientos} />

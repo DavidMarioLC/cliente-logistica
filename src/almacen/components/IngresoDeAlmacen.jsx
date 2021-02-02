@@ -4,7 +4,7 @@ import ListIngresoMateriales from './ingresoAlmacen/ListIngresoMateriales';
 import { getSedes } from '../../sedes/services/sedesApi'
 import { obtenerAlmacenPorSede, obtenerMaterialesPorAlmacen, registrarIngresoMaterial } from '../services/AlmacenAPI';
 
-const IngresoDeAlmacen = ({ listarKardex }) => {
+const IngresoDeAlmacen = ({ listarKardex, ListarMovimientos }) => {
 
     //states
     let date = new Date()
@@ -155,7 +155,8 @@ const IngresoDeAlmacen = ({ listarKardex }) => {
             })
 
             setDisabled(true);
-            listarKardex()
+            listarKardex();
+            ListarMovimientos();
         }
     }
     // ui antdesign

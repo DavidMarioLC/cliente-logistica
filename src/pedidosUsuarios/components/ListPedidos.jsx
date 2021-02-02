@@ -121,9 +121,9 @@ const ListPedidos = ({ pedidos, listarPedidos }) => {
             dataIndex: 'idPedido',
             key: 'idPedido',
 
-            render: (idPedido) => (
+            render: (idPedido, row) => (
 
-                <Space size="middle">
+                <Space size="large">
 
                     <Popconfirm title="¿Deseas ver los detalles del pedido?"
                         okText="Si"
@@ -136,7 +136,7 @@ const ListPedidos = ({ pedidos, listarPedidos }) => {
 
                     <CSVLink
                         data={pedidosExport}
-                        filename={'reporte-pedidos.csv'}
+                        filename={`${row.usuario}_${row.fecha}.csv`}
                         asyncOnClick={true}
                         onClick={() => exportarExcel(idPedido)}
                     >
