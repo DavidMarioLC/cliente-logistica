@@ -6,6 +6,8 @@ import gerente from '../images/gerente.svg'
 
 import ListaPedidos from '../components/ListaPedidos'
 import ListaCentroCostos from '../components/ListaCentroCostos'
+import EstadoPedidoUsuario from '../components/EstadoPedidoUsuario';
+import { ListaUsuarioEstadoPedidoInactivo, ListaUsuarioEstadoPedidoActivo} from '../../usuario/services/usuarioApi';
 import { ListPedidosAPI } from '../../pedidosUsuarios/services/pedidosApi'
 import { ListCecos } from '../../ceco/services/cecosApi'
 import ProductosPorSedesAlmacen from '../../almacen/components/ProductosPorSedesAlmacen';
@@ -16,11 +18,32 @@ const { Content } = Layout
 
 const InfoGerencia = () => {
 
+    console.log(ListaUsuarioEstadoPedidoInactivo());
+ 
     const [pedidos, setPedidos] = useState([])
     const [cecos, setCecos] = useState([])
 
+    /*Lista de usuario que aun no hizo su pedido*/
+    const [pedidoActivo,setPedidoActivo] = useState([]);
+
+    /*Lista de usuario que ya hizo su pedido*/
+    const [pedidoInactivo,setPedidoInactivo] = useState([]);
+
+    const listarUsuarioPedidoInactivo = async() =>{
+        const dataPedidoInactivo = await ListaUsuarioEstadoPedidoInactivo();
+        console.log("vista inactivo")
+        console.log(dataPedidoInactivo);
+        setPedidoInactivo(dataPedidoInactivo);
+    }
+
+    const listarUsuarioPedidoActivo = async() => {
+        const dataPedidoActivo = await ListaUsuarioEstadoPedidoActivo();
+        setPedidoActivo(dataPedidoActivo);
+    }
+
     const listarPedidos = async () => {
         const data = await ListPedidosAPI()
+        console.log(data);
         setPedidos(data)
     }
 
@@ -32,6 +55,8 @@ const InfoGerencia = () => {
     useEffect(() => {
         listarPedidos()
         listarCentroCostos()
+        listarUsuarioPedidoActivo()
+        listarUsuarioPedidoInactivo()
     }, [])
 
 
@@ -78,6 +103,11 @@ const InfoGerencia = () => {
                 <Col md={18}>
                     <Divider orientation="left">Materiales</Divider>
                     <ProductosPorSedesAlmacen />
+                </Col>
+
+                <Col md={18}>
+                    <Divider orientation="left">Estado de pedidos de usuarios</Divider>
+                    <EstadoPedidoUsuario pedidoActivo={pedidoActivo} pedidoInactivo={pedidoInactivo} />
                 </Col>
             </Row>
         </>

@@ -169,17 +169,28 @@ const PedidoFirstForm = () => {
 
     const agregarMaterial = () => {
         setCard(false)
+       // const elementos = pedido.materiales.filter(item => item.codigo !== value)
+        console.log(pedido.materiales);
+        console.log("---------------------")
+        const elementos = pedido.materiales.filter(item => item.codigo == material.codigo)
+        console.log(elementos.length)
+        if(elementos.length===0){
+            setPedido({
+                ...pedido,
+                materiales: [...pedido.materiales, material]
+            }) 
+        }
 
-        setPedido({
-            ...pedido,
-            materiales: [...pedido.materiales, material]
-        })
 
-    }
+
+        
+    }    
+
+
 
     const quitarMaterial = (value) => {
         const elementos = pedido.materiales.filter(item => item.codigo !== value)
-
+    
         setPedido({
             ...pedido,
             materiales: elementos

@@ -10,7 +10,14 @@ const PublicRoutes = ({ auth, rol, component: Component, ...rest }) => {
     if (auth && rol === 'Administrador') {
         return < Redirect to="/dashboard" />
 
+    } else if (auth && rol === "invitado") {
+
+        return <Redirect to="/dashboard/invitado" />
+    } else if (auth && rol === "supervisor") {
+
+        return <Redirect to="/dashboard/supervisor" />
     } else if (auth && rol === 'usuario') {
+
         return < Redirect to="/requerimientos/pedido" />
     }
     else if (auth && rol === 'gerente') {

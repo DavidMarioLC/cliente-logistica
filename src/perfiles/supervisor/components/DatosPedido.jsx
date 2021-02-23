@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
 import { Table, Tag } from 'antd';
 import { Space, Popconfirm } from 'antd';
-import { EyeOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons'
+import { EyeOutlined, } from '@ant-design/icons'
 import DetallePedido from './DetallePedido'
-import { aprobarPedidoAPI, rechazarPedidoAPI } from '../../pedidosUsuarios/services/pedidosApi'
-import { openNotificationAprobado, openNotificationRechazado } from './Notification'
 
-const ListaPedidos = ({ pedidos, listarPedidos, listarCentroCostos }) => {
+
+const DatosPedidos = ({ pedidos,idUsuario }) => {
 
     const [viewDetalle, setViewDetalle] = useState({ visible: false })
 
     const [idPedido, setIdPedido] = useState(0)
 
+    console.log(pedidos);
 
     //guardando el idPedido y mostrando la lista de detalle
     const mostrarDetalleProducto = (idPedido) => {
@@ -20,28 +20,6 @@ const ListaPedidos = ({ pedidos, listarPedidos, listarCentroCostos }) => {
             visible: true
         })
 
-    }
-
-
-    //aprobar pedido
-    const aprobarPedido = async (idPedido, obj) => {
-
-        const { success } = await aprobarPedidoAPI(idPedido, obj.idCeco, obj.fk_usuario)
-        if (success) {
-            listarPedidos();
-            listarCentroCostos()
-            openNotificationAprobado("success")
-        }
-
-
-    }
-
-    const rechazarPedido = async (idPedido) => {
-        const { success } = await rechazarPedidoAPI(idPedido)
-        if (success) {
-            listarPedidos();
-            openNotificationRechazado('error')
-        }
     }
 
     const listaPedidos = []
@@ -55,7 +33,6 @@ const ListaPedidos = ({ pedidos, listarPedidos, listarCentroCostos }) => {
             ceco: pedido.nombreCeco,
             sede: pedido.nombreSede,
             idPedido: pedido.idPedido,
-            fk_usuario: pedido.fk_usuario,
             idCeco: pedido.idCeco,
             maquinas: pedido.maquinaDestino
         })
@@ -115,9 +92,7 @@ const ListaPedidos = ({ pedidos, listarPedidos, listarCentroCostos }) => {
             key: 'maquinas',
             dataIndex: 'maquinas',
         },
-
-
-
+       
         {
             title: 'Action',
             dataIndex: 'idPedido',
@@ -132,20 +107,7 @@ const ListaPedidos = ({ pedidos, listarPedidos, listarCentroCostos }) => {
                         onConfirm={() => mostrarDetalleProducto(idPedido)}
                         cancelText="No">
                         <EyeOutlined />
-                    </Popconfirm>
-                    <Popconfirm title="¿Deseas aprobar el pedido?"
-                        okText="Si"
-                        onConfirm={() => aprobarPedido(idPedido, obj)}
-                        cancelText="No">
-                        <CheckCircleOutlined />
-                    </Popconfirm>
-                    <Popconfirm title="¿Deseas rechazar el pedido?"
-                        okText="Si"
-                        onConfirm={() => rechazarPedido(idPedido)}
-                        cancelText="No">
-                        <CloseCircleOutlined />
-                    </Popconfirm>
-
+                    </Popconfirm>          
                 </Space>
             ),
         },
@@ -155,10 +117,10 @@ const ListaPedidos = ({ pedidos, listarPedidos, listarCentroCostos }) => {
 
         !viewDetalle.visible ?
             <Table rowKey="idPedido" columns={columns} dataSource={listaPedidos} scroll={{ x: 320 }} />
-            : <DetallePedido idPedido={idPedido} setViewDetalle={setViewDetalle} />
+            : <DetallePedido idUsuario={idUsuario} idPedido={idPedido} setViewDetalle={setViewDetalle} />
 
 
     )
 }
 
-export default ListaPedidos
+export default DatosPedidos

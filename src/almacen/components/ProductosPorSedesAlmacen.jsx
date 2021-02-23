@@ -5,6 +5,7 @@ import { Select, Card, Col, Row, Button, Spin } from 'antd';
 import { getSedes } from '../../sedes/services/sedesApi'
 import { obtenerAlmacenPorSede, listarProductosSedesAlmacen } from '../services/AlmacenAPI'
 import ListaProductosFiltradosPorSedeAlmacen from './ListaProductosFiltradosPorSedeAlmacen'
+import { Fragment } from 'react';
 
 
 const ProductosPorSedesAlmacen = () => {
@@ -72,7 +73,7 @@ const ProductosPorSedesAlmacen = () => {
 
     }
     return (
-        <>
+        <Fragment>
             <Card>
                 <Row justify="center" gutter={[16, 8]}>
 
@@ -126,7 +127,7 @@ const ProductosPorSedesAlmacen = () => {
                         : <ListaProductosFiltradosPorSedeAlmacen listaProductos={listaProductos} />
                 }
             </Card>
-        </>
+        </Fragment>
     )
 }
 

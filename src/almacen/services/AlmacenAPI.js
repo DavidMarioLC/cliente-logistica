@@ -1,4 +1,148 @@
+import moment from 'moment'
 const API_URL = `${process.env.REACT_APP_API_URL}/almacen`
+
+
+/*Agregando una nueva funcionalida */
+export const obtenerAlmacenApi = async () => {
+    const config = {
+        method: 'GET'
+    }
+
+    const response = await fetch(`${API_URL}/almacen`, config)
+    const inventario = await response.json();
+    return inventario;
+}
+
+export const IngresoMasivoExel = async (material) => {
+
+
+        /*
+          "codigo": 14015711,
+    "material": "RODAMIENTO 6303-2RS",
+    "cantidad": 10,
+    "unidad": "UN",
+    "fecha": "29/12/2020",
+    "gpo_articulo": 1,
+    "centro": 4202,
+    "codigo_almacen": 61,
+    "grupo_compra": "c01",
+    "usuario": "ANGEL",
+    "tipo_Mantenimiento": "Correctivo",
+    "maquina_Destino": "Motos"
+        */
+
+    //    const dataExel = [];
+
+    // material.map((item)=>{
+    //     dataExel.push({
+    //         codigo: item.CODIGO,
+            
+    //     })
+    // })
+       
+    /*
+    
+    cantidad: 3
+centro: 4202
+codigo: 14057087
+codigo_almacen: 61
+fecha: "29/12/2020"
+gpo_articulo: 1
+grupo_compra: "c01"
+maquina_Destino: "Motos"
+material: "BATERIA 12N9-3B"
+tipo_Mantenimiento: "Correctivo"
+unidad: "UN"
+usuario: "ANGEL"
+*/
+    
+    console.log("API almacen ",material);
+    const config = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(material)
+    };
+
+    console.log("movimient ===>");
+    const response = await fetch(`${API_URL}/IngresoMasivoExel`, config)
+    const responseApi = await response.json();
+
+    return responseApi;
+}
+
+export const ingresarMaterialExelKardex = async (material) => {
+    console.log("=========API KARDEX===========")
+    console.log(material);
+    console.log("=========API KARDEX===========")
+    const config = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(material)
+    }
+
+    const response = await fetch(`${API_URL}/material/exel/kardex`, config);
+    const responseApi = response.json();
+
+    return responseApi;
+}
+
+export const IngresarMaterialExelMovimiento = async (material) => {
+
+    const data = [];
+    let fechaActual = moment().format("DD/MM/YYYY");
+    material.map((item) =>
+        data.push({
+            tipoMovimiento: 'INGRESO',
+            codigoDocumento: 'IMPORTACION MASIVA',
+            fk_inventario: '0061',
+            personaResponsable: item.usuario,
+            uso: 'NO DEFINIDO',
+            create_date: fechaActual
+        })
+    )
+
+    const config = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    };
+
+    console.log("movimient ===>");
+    console.log(data);
+    const response = await fetch(`${API_URL}/material/exel/movimiento`, config)
+    const responseApi = await response.json();
+
+    return responseApi;
+}
+
+export const ingresarMaterialExel = async (material) => {
+
+    console.log(typeof (material));
+    console.log("API ===>")
+
+    const data = [];
+    //console.log(materiales);
+    material.map((item) =>
+        data.push({
+            skuProducto: item.codigo,
+            nombreProducto: item.material,
+            cantidadProductoAlmacen: item.cantidad
+        }),
+    );
+
+    console.log(data);
+
+    const config = {
+
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    };
+
+    const response = await fetch(`${API_URL}/material/exel`, config);
+    const responseApi = await response.json();
+    return responseApi;
+}
 
 export const obtenerAlmacenPorSede = async (fk_sede) => {
     const config = {
@@ -43,7 +187,7 @@ export const getMaterialbyStock = async (idAlmacen) => {
 }
 
 export const registrarInicializacionAlmacen = async (ingreso) => {
-    
+
     const config = {
 
         method: "POST",
@@ -225,4 +369,16 @@ export const actualizarStockAlmacenGeneral = async (materiales) => {
     const responseApi = await fetch(`${API_URL}/actualizarStock/almacenGeneral`, config);
     const response = await responseApi.json();
     return response;
+}
+
+export const MostrarProductoAlmacen = async () => {
+    const config = {
+        method: 'GET'
+    };
+
+    const responseApi = await fetch(`${API_URL}/mostarProductoAlmacen`, config);
+    const response = await responseApi.json();
+
+    return response;
+
 }

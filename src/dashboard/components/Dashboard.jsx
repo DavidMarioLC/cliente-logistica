@@ -52,6 +52,11 @@ const Dashboard = () => {
                         <Route exact path={`/gerente`} >
                             <Redirect to={`/dashboard`}></Redirect>
                         </Route>
+
+                        <Route exact path={`/invitado`}>
+                            <Redirect to={`/dashboard`}></Redirect>
+                        </Route>
+
                     </Content>
                 </Layout>
             </Layout>

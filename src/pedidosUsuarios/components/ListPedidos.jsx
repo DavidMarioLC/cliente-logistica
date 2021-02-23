@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Table, Tag } from 'antd';
 import { Space, Popconfirm } from 'antd';
 import { SearchOutlined, DeleteOutlined } from '@ant-design/icons'
@@ -40,6 +40,7 @@ const ListPedidos = ({ pedidos, listarPedidos }) => {
         return false
     }
 
+
     const deletePedido = async (idPedido) => {
         console.log(idPedido);
         const { success } = await deletePedidoId(idPedido);
@@ -48,6 +49,8 @@ const ListPedidos = ({ pedidos, listarPedidos }) => {
         }
     }
 
+
+
     pedidos.map((pedido, index) => (
         listaPedidos.push({
             orden: index + 1,
@@ -55,13 +58,12 @@ const ListPedidos = ({ pedidos, listarPedidos }) => {
             estado: pedido.estado,
             usuario: pedido.nombrePersonalUsuario,
             ceco: pedido.nombreCeco,
+            nombreFundo: pedido.nombreFundo,
             sede: pedido.nombreSede,
             idPedido: pedido.idPedido,
             maquinas: pedido.maquinaDestino
-
         })
     ))
-
 
 
     const columns = [
@@ -101,9 +103,9 @@ const ListPedidos = ({ pedidos, listarPedidos }) => {
 
         },
         {
-            title: 'ceco',
-            key: 'ceco',
-            dataIndex: 'ceco',
+            title: 'nombreFundo',
+            key: 'nombreFundo',
+            dataIndex: 'nombreFundo',
 
         },
         {
@@ -118,12 +120,12 @@ const ListPedidos = ({ pedidos, listarPedidos }) => {
         },
         {
             title: 'Acciones',
-            dataIndex: 'idPedido',
+            dataIndex: "idPedido",
             key: 'idPedido',
 
             render: (idPedido, row) => (
 
-                <Space size="large">
+                <Space size="middle">
 
                     <Popconfirm title="¿Deseas ver los detalles del pedido?"
                         okText="Si"
@@ -133,10 +135,10 @@ const ListPedidos = ({ pedidos, listarPedidos }) => {
                     </Popconfirm>
 
 
-
                     <CSVLink
                         data={pedidosExport}
-                        filename={`${row.usuario}_${row.fecha}.csv`}
+                        //editando el nombre de archivo                        
+                        filename={row.usuario + "_" + row.fecha + ".csv"}
                         asyncOnClick={true}
                         onClick={() => exportarExcel(idPedido)}
                     >

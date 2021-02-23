@@ -3,9 +3,10 @@ import { Form, Input, Row, Col, Button, Select } from 'antd'
 
 
 //api
+import { agregarAccesoUsuarioApi } from '../services/Accesousuario';
 import { getRolesApi } from '../../rol/services/rolApi'
 import { createUsuarioApi } from '../services/usuarioApi'
-
+import { obtenerAlmacenApi } from '../../almacen/services/AlmacenAPI'
 
 import { openNotificationSuccess } from '../components/Notification'
 
@@ -15,24 +16,39 @@ const NewUsuario = ({ listarUsuarios }) => {
     const [roles, setRoles] = useState([]); //trae roles
 
 
+    const [inventarios, setInventario] = useState([]);
+
+    /*Obtnemos la lista de fundos para mostrar en combobox */
+    const listarInventarios = async () => {
+        const data = await obtenerAlmacenApi();
+        setInventario(data);
+    }
+
 
     useEffect(() => {
         getRolesApi()
             .then(data => setRoles(data))
-
+        listarInventarios();
     }, []);
 
-    const RegisterUser = async (values) => {
+    const agregarAccesoUsuario = async (value) => {
 
-        const { success } = await createUsuarioApi(values);
+        const { success } = await agregarAccesoUsuarioApi(value);
         if (success) {
-            listarUsuarios()
-            openNotificationSuccess()
-            form.resetFields()
-
+            console.log("Acceso usuario insertardo");
         }
     }
 
+    const RegisterUser = async (value) => {
+        console.log(value);
+        const { success } = await createUsuarioApi(value);
+        if (success) {
+            agregarAccesoUsuario(value)
+            listarUsuarios()
+            openNotificationSuccess()
+            form.resetFields()
+        }
+    }
 
     return (
         <Form onFinish={RegisterUser} form={form} layout="vertical" >
@@ -82,7 +98,7 @@ const NewUsuario = ({ listarUsuarios }) => {
                         <Input.Password />
                     </Form.Item>
                 </Col>
-                <Col md={22}>
+                <Col md={10}>
                     <Form.Item
                         name="fk_rol"
                         label="seleccione el rol de usuario"
@@ -103,6 +119,35 @@ const NewUsuario = ({ listarUsuarios }) => {
                         </Select>
                     </Form.Item>
                 </Col>
+
+                <Col md={10}>
+                    <Form.Item
+                        name="fk_inventario"
+                        label="seleccione fundo"
+                        labelCol={{ span: 24 }}
+                        wrapperCol={{ span: 24 }}
+                        rules={[{ required: true, message: 'ingrese el fundo' }]}
+                    >
+                        <Select
+                            mode="multiple"
+                            style={{ width: '100%' }}
+                            placeholder="Seleccione un inventario"
+                            optionLabelProp="label"
+                        >
+                            {
+                                inventarios.map((item) => (
+                                    <Option value={item.codigoInventario} label={item.abr}>
+                                        {item.nombreInventario}
+                                    </Option>
+                                ))
+                            }
+
+                        </Select>
+
+
+                    </Form.Item>
+                </Col>
+
                 <Col md={22}>
                     <Form.Item
                         labelCol={{ span: 24 }}
@@ -113,6 +158,7 @@ const NewUsuario = ({ listarUsuarios }) => {
                          </Button>
                     </Form.Item>
                 </Col>
+
             </Row>
 
         </Form>

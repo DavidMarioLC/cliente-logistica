@@ -9,16 +9,46 @@ import PanelRequerimientos from '../pedidos/containers/PanelRequerimientosv2'
 
 import DashboardView from '../dashboardView/components/DashboardView'
 
+import InvitadoContainer from '../perfiles/invitado/containers/InvitadoContainer';
+
+import SupervisorContainer from '../perfiles/supervisor/containers/SupervisorContainer';
+
 const ProtectedRoutes = ({ auth, rol, component: Component, ...rest }) => {
 
 
+    console.log(auth, rol);
 
-    if (auth && rol === 'gerente') {
+    if (auth) {
+        switch (rol) {
+            case "gerente":
+                return <Route {...rest} component={DashboardView} />
+                break;
+            case "invitado":
+                return <Route {...rest} component={InvitadoContainer} />
+                break;
+            case "supervisor":
+                return <Route {...rest} component={SupervisorContainer} />
+            case "Administrador":
+                return <Route {...rest} component={DashboardLogistica} />
+                break;
+            case "usuario":
+                return <Route {...rest} component={PanelRequerimientos} />
+                break;
+            default:
+                return <Redirect to="/login" />
+        }
+    }
+
+
+    /*if (auth && rol === 'gerente') {
 
         return <Route {...rest} component={DashboardView} />
 
-    }
-    else if (auth && rol === 'Administrador') {
+    } else if (auth && rol === 'invitado') {
+
+        return <Route {...rest} component={InvitadoContainer} />
+
+    } else if (auth && rol === 'Administrador') {
 
         return <Route {...rest} component={DashboardLogistica} />
     }
@@ -30,7 +60,7 @@ const ProtectedRoutes = ({ auth, rol, component: Component, ...rest }) => {
 
 
         return <Redirect to="/login" />
-    }
+    }*/
 
 }
 

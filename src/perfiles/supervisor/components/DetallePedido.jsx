@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { PageHeader, Table, Space, Popconfirm, Drawer, Button, Tag, InputNumber, Typography } from 'antd'
 import { FormOutlined, DeleteOutlined } from '@ant-design/icons'
-
-import { getDetallePedidoId, actualizarCantidadAPI, deleteProductoAPI, getDetallesPedidosId } from '../../pedidosUsuarios/services/pedidosApi'
+import { listarDetallePedido } from '../services/SupervisorApi';
+import { updateCantidadPedidoEscogidoId, actualizarCantidadAPI, deleteProductoAPI, getDetallesPedidosId } from '../../../pedidosUsuarios/services/pedidosApi'
 import { Fragment } from 'react'
-const DetallePedido = ({ idPedido, setViewDetalle }) => {
+import Item from 'antd/lib/list/Item';
+const DetallePedido = ({ idUsuario, idPedido, setViewDetalle }) => {
     const { Text } = Typography
     const [visible, setVisible] = useState(false);
     //mis pedidos
@@ -15,7 +16,7 @@ const DetallePedido = ({ idPedido, setViewDetalle }) => {
 
     //trayendo pedidos
     const listaDetallePedidos = async (idPedido) => {
-        const pedidos = await await getDetallesPedidosId(idPedido)
+        const pedidos = await await listarDetallePedido(idUsuario, idPedido)
         setListaPedidos(pedidos)
     }
 
@@ -25,16 +26,6 @@ const DetallePedido = ({ idPedido, setViewDetalle }) => {
     }, [idPedido])
 
 
-
-    const showEdit = async (id) => {
-        const pedidos = await getDetallePedidoId(id)
-        console.log("CARGANDO DETALLE PEDIDO==>cargar id pedido vista")
-        console.log(pedidos);
-        setVisible(true);
-        setEditPedido(pedidos)
-
-    }
-    
     const onClose = () => {
         setVisible(false);
     };
@@ -44,21 +35,15 @@ const DetallePedido = ({ idPedido, setViewDetalle }) => {
             ...editPedido,
             cantidadPedido: value
         })
-
     }
 
     const actualizarCantidad = async () => {
-        await actualizarCantidadAPI(editPedido[0].idDetalle_pedido, editPedido)
+        await actualizarCantidadAPI(editPedido.idDetalle_pedido, editPedido)
         setVisible(false);
         listaDetallePedidos(idPedido)
 
     }
 
-    const deletePedido = async (id) => {
-        await deleteProductoAPI(id)
-        listaDetallePedidos(idPedido)
-
-    }
 
     const data = []
 
@@ -138,16 +123,24 @@ const DetallePedido = ({ idPedido, setViewDetalle }) => {
             render: (almacen) => {
 
                 let almacenArray = almacen.split(" ");
-                let cantidadArray = almacenArray[1].split(":");
-                let catidadArrayCastillos = almacenArray[2].split(":");
-                let catidadArrayVid = almacenArray[3].split(":");
-                // console.log(cantidadArray);
+                const myArrClean = almacenArray.filter(Boolean)
+
+                const almacenJson = [];                
+
+                myArrClean.forEach(element => {
+                    const almacenValido = element.split(":");
+                    almacenJson.push({"nombre":almacenValido[0],"stock":almacenValido[1]});                    
+                });
+
+
+                console.log(almacenJson);
 
                 return (
                     <Fragment>
-                        <Tag width="10px" style={{fontSize:"8pt",textTransform:"lowercase" ,fontWeight:"bold"}} color={parseInt(cantidadArray[1]) > 0 ? "green" : "red"}>{almacenArray[1]}</Tag>
-                        <Tag style={{ fontSize: "8pt", textTransform: "lowercase", fontWeight: "bold" }} color={parseInt(catidadArrayCastillos[1]) > 0 ? "green" : "red"}>{almacenArray[2]}</Tag>
-                        <Tag style={{ fontSize: "8pt", textTransform: "lowercase", fontWeight: "bold" }} color={parseInt(catidadArrayVid[1]) > 0 ? "green" : "red"}>{almacenArray[3]}</Tag>
+                        {almacenJson.map(item => (
+                            <Tag color={item.stock>0?"green":"red"} width="10px" >{item.nombre}:{item.stock}</Tag>
+
+                        ))}
                     </Fragment>
 
                 )
@@ -155,31 +148,7 @@ const DetallePedido = ({ idPedido, setViewDetalle }) => {
             }
         },
 
-        {
-            title: 'Action',
-            dataIndex: 'idDetalle_pedido',
-            key: 'idDetalle_pedido',
 
-            render: (idDetalle_pedido) => (
-
-                <Space size="middle">
-
-                    <Popconfirm title="¿Deseas modificar la cantidad del producto?"
-                        okText="Si"
-                        onConfirm={() => showEdit(idDetalle_pedido)}
-                        cancelText="No">
-                        <FormOutlined />
-                    </Popconfirm>
-                    <Popconfirm title="¿Deseas quitar este producto?"
-                        okText="Si"
-                        onConfirm={() => deletePedido(idDetalle_pedido)}
-                        cancelText="No">
-                        <DeleteOutlined />
-                    </Popconfirm>
-
-                </Space>
-            ),
-        }
     ];
 
 
@@ -189,7 +158,7 @@ const DetallePedido = ({ idPedido, setViewDetalle }) => {
                 className="site-page-header"
                 onBack={() => setViewDetalle({ visible: false })}
                 title="Regresar"
-                subTitle="volver a la lista de pedidos"
+                subTitle="volver a la lista de pedidos"            
             />
             <Table rowKey="idDetalle_pedido"
                 dataSource={data}
