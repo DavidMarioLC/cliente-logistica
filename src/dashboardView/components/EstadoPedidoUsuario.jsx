@@ -1,14 +1,14 @@
 import React from 'react'
 import { Table, Tag } from 'antd';
 
-const EstadoPedidoUsuario = ({pedidoInactivo,pedidoActivo }) => {
+const EstadoPedidoUsuario = ({ pedidoInactivo, pedidoActivo }) => {
 
 
     const dataActivo = [];
 
-    pedidoActivo.map((item,index)=>
+    pedidoActivo.map((item, index) =>
         dataActivo.push({
-            orden: index+1,
+            orden: index + 1,
             idUsuario: item.idUsuario,
             nombrePersonalUsuario: item.nombrePersonalUsuario,
             apellidoPersonalUsuario: item.apellidoPersonalUsuario,
@@ -17,7 +17,7 @@ const EstadoPedidoUsuario = ({pedidoInactivo,pedidoActivo }) => {
     )
 
     const dataInactivo = [];
-    pedidoInactivo.map((item,index)=>
+    pedidoInactivo.map((item, index) =>
         dataInactivo.push({
             orden: index + 1,
             idUsuario: item.idUsuario,
@@ -27,9 +27,9 @@ const EstadoPedidoUsuario = ({pedidoInactivo,pedidoActivo }) => {
         })
     )
 
-    console.log("vista prueba de data");
+
     const data = dataActivo.concat(dataInactivo);
-    console.log(data);
+
 
     /*{orden: 5, idUsuario: 89,  : "GONZALES RAMIRES", estado: "0"} */
     const columns = [
@@ -54,12 +54,12 @@ const EstadoPedidoUsuario = ({pedidoInactivo,pedidoActivo }) => {
         {
             title: 'Estado',
             dataIndex: 'estado',
-            key: 'estado',            
-            render: (estado)=>(
-                <p className="text-center h6"><Tag color={estado === "1" ? "green" : "red"} >{estado === "1" ? "Pedido realizado" : "No hizo su pedido"}</Tag></p> 
+            key: 'estado',
+            render: (estado) => (
+                <p className="text-center h6"><Tag color={estado === "1" ? "green" : "red"} >{estado === "1" ? "Pedido realizado" : "No hizo su pedido"}</Tag></p>
             )
         }
-      
+
     ];
 
 

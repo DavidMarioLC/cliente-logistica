@@ -154,7 +154,7 @@ const ListaPedidos = ({ pedidos, listarPedidos, listarCentroCostos }) => {
     return (
 
         !viewDetalle.visible ?
-            <Table rowKey="idPedido" columns={columns} dataSource={listaPedidos} scroll={{ x: 320 }} />
+            <Table rowKey="orden" columns={columns} dataSource={listaPedidos} scroll={{ x: 320 }} />
             : <DetallePedido idPedido={idPedido} setViewDetalle={setViewDetalle} />
 
 

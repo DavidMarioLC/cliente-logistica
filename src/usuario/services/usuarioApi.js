@@ -5,16 +5,15 @@ const API_URL = `${process.env.REACT_APP_API_URL}/usuarios`
 export const ListaUsuarioEstadoPedidoActivo = async () => {
 
     try {
-        console.log("API USER")
+
         const config = {
             method: 'GET'
         }
 
         const response = await fetch(`${API_URL}/pedido/Activo`, config);
-        console.log("APIIIIIIIIIIIIIIIIIIIII")
+
         const usuarioEstado = await response.json();
-        console.log("APIIIIIIIIIIIIIIIIIIIII")
-        console.log(usuarioEstado);
+
         return usuarioEstado;
     } catch (error) {
         console.log(error)
@@ -23,7 +22,7 @@ export const ListaUsuarioEstadoPedidoActivo = async () => {
 }
 
 export const ListaUsuarioEstadoPedidoInactivo = async () => {
-    console.log("Api Inactivo")
+
     const config = {
         method: "GET"
     }

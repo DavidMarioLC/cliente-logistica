@@ -16,7 +16,7 @@ import SupervisorContainer from '../perfiles/supervisor/containers/SupervisorCon
 const ProtectedRoutes = ({ auth, rol, component: Component, ...rest }) => {
 
 
-    console.log(auth, rol);
+
 
     if (auth) {
         switch (rol) {

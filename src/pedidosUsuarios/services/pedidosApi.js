@@ -1,15 +1,17 @@
 
 const API_URL = `${process.env.REACT_APP_API_URL}/pedidos`
 
-export const ListPedidosAPI = async () => {
+export const ListPedidosAPI = async (estado, month, year) => {
 
     const config = {
         method: 'GET'
     }
 
-    const response = await fetch(API_URL, config);
-    const pedidos = await response.json();
+    // const response = await fetch(`${API_URL}/:estado/:mes/:año`, config);
+    const response = await fetch(`${API_URL}/${estado}/${month}/${year}`, config);
 
+    const pedidos = await response.json();
+    console.log(pedidos);
     return pedidos;
 }
 
@@ -25,14 +27,14 @@ export const getDetallesPedidosId = async (id) => {
     return pedidos;
 }
 
-export const getDetallePedidoId = async (idDetallePedido)=>{
+export const getDetallePedidoId = async (idDetallePedido) => {
     const config = {
-        method:'GET'
+        method: 'GET'
     }
     console.log("GETDETALLEPEDIDO API:")
     console.log(idDetallePedido);
 
-    const response = await fetch(`${API_URL}/detallePedidoId/${idDetallePedido}`,config);
+    const response = await fetch(`${API_URL}/detallePedidoId/${idDetallePedido}`, config);
     const detallePedido = await response.json();
     console.log("detalle pedido ID API:")
     console.log(detallePedido);
@@ -45,8 +47,8 @@ export const updateCantidadPedidoEscogidoId = async (idPedidoDetalle) => {
         method: 'GET'
     }
 
-    console.log("Obteniend id API de: "+idPedidoDetalle);
-    console.log(idPedidoDetalle);    
+    console.log("Obteniend id API de: " + idPedidoDetalle);
+    console.log(idPedidoDetalle);
 
     const response = await fetch(`${API_URL}/detalleProducto/${idPedidoDetalle}`, config);
     const pedidos = await response.json();
